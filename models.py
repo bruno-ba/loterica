@@ -6,7 +6,34 @@ from datetime import datetime
 
 @dataclass
 class Sorteio:
-    ''' dataclass sorteio '''
+    """
+    dataclass Sorteio
+
+    Responsável por receber as bolas sorteadas, e fazer a identificaçã:
+
+    bolas sorteadas:
+            quantidade de bolas sorteadas pares -> len
+            soma das bolas sorteadas pares -> sum
+            média das bolas sorteadas pares -> sum / len
+
+            quantidade de bolas sorteadas impares -> len
+            soma das bolas sorteadas impares -> sum
+            média das bolas sorteadas impares -> sum / len
+
+    bolas não sorteadas:
+            quantidade de bolas não sorteadas pares -> len
+            soma das bolas não sorteadas pares -> sum
+            média das bolas não sorteadas pares -> sum / len
+
+            quantidade de bolas não sorteadas impares -> len
+            soma das bolas não sorteadas impares -> sum
+            média das bolas não sorteadas impares -> sum / len
+
+    propriedades zero_fill:
+    são responsáveis por preencher com zeros '.' qualquer número ausente, permitindo assim, manter um tamanho fixo de
+    colunas na hora de gerar os csv.
+
+    """
     numero: int
     data: datetime
     bolas: InitVar[tuple]
@@ -63,7 +90,30 @@ class Sorteio:
 
 
 class Concurso:
+    """
+      class Concurso
+
+      Responsável por receber por criar os tipos de concursos - simples apenas com bolas sorteadas, o que é a
+      maioria das loterias, sendo possível aplicar na maioria delas. A exemplo de loterias com alguns critérios
+      diferentes, como o dia da sorte, teria que especializar esta classe.
+
+      Esta classe:
+      bolas total no concurso -> qtd_bolas ex: lotofácil - 25
+      bolas total que são sorteadas -> qtd_bolas  ex: lotofácil - 15
+      bolas listagem da quantidade mínima de acertos - para posterior conferência-> qtd_min_acertos  ex: lotofácil ganha
+      com 11, 12, 13, 14, 15 acertos
+
+      Os resultados dos ainda são pré-carregados manualmente.
+      a referência atual é o site: www.asloterias.com.br
+
+      Cada concurso criado irá gerar um diretório-path relativo, como o nome do concurso e um arquivo csv:
+      resultados_nomedoconcurso.csv, que deverá ser substituido manualmente
+      """
     def _create_init_file(self) -> tuple:
+        """
+        método interno para verificar ou criar os diretórios e arquivos resultados csv.
+
+        """
         pth_folder = os.path.join('.\\', self.nome)
         file_nome = 'resultados' + '_' + self.nome + '.csv'
         pth_file = os.path.join(pth_folder, file_nome)
@@ -80,6 +130,9 @@ class Concurso:
         return pth_folder, pth_file
 
     def _load_sorteios(self) -> list:
+        """
+        Carrega os sorteios, fazendo a limpeza das linhas iniciais não relevantes.
+        """
         rows = []
         sorteios = []
 
@@ -114,7 +167,7 @@ class Concurso:
 
         return sorteios
 
-    def __init__(self, nome: str, qtd_bolas: int, qtd_sorteadas: int, qtd_min_acertos: int):
+    def __init__(self, nome: str, qtd_bolas: int, qtd_sorteadas: int, qtd_min_acertos: tuple):
         self._nome = ''
         self._qtd_bolas = 0
         self._qtd_sorteadas = 0
@@ -130,6 +183,10 @@ class Concurso:
         self._sorteios = self._load_sorteios()
 
     def criar_relatorio(self, nome_relatorio: str, propriedades_sorteio: list) -> None:
+        """
+        Permite gerar relatórios com qualquer propriedade da classe Sorteio
+
+        """
         if len(self.sorteios) == 0:
             print(f'error <- file: {self._pth_file}, empty')
         else:
@@ -272,5 +329,5 @@ class Concurso:
         return self._qtd_min_acertos
 
     @qtd_min_acertos.setter
-    def qtd_min_acertos(self, value: int) -> None:
+    def qtd_min_acertos(self, value: tuple) -> None:
         self._qtd_min_acertos = value
