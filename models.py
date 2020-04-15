@@ -92,10 +92,10 @@ class Concurso:
                 header = next(csv_rd, 'empty')  # clear header
 
                 if header == 'empty':
-                    print(f'warning <- file: {os.path.basenome(self._pth_file)}, empty.')
+                    print(f'warning <- file: {os.path.basename(self._pth_file)}, empty.')
 
                 else:
-                    print(f'ok -> file: {os.path.basenome(self._pth_file)}, filled.')
+                    print(f'ok -> file: {os.path.basename(self._pth_file)}, filled.')
                     for r in csv_rd:
                         rows.append(r)
 
@@ -230,10 +230,10 @@ class Concurso:
                         csv_wr.writerow(sorteio_row)
 
             except PermissionError:
-                print(f'error <- file: {os.path.basenome(pth_file)}, open.')
+                print(f'error <- file: {os.path.basename(pth_file)}, open.')
 
             else:
-                print(f'ok -> file: {os.path.basenome(pth_file)}, created.')
+                print(f'ok -> file: {os.path.basename(pth_file)}, created.')
 
     @property
     def sorteios(self):
