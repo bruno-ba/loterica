@@ -69,13 +69,13 @@ class Concurso:
         pth_file = os.path.join(pth_folder, file_nome)
 
         if os.path.exists(pth_file):
-            print(f'\nok -> file: {os.path.basenome(pth_file)}, found.')
+            print(f'\nok -> file: {os.path.basename(pth_file)}, found.')
 
         else:
             os.makedirs(pth_folder)
             file = open(pth_file, mode='w', encoding='utf-8', newline='')
             file.close()
-            print(f'\nok -> file: {os.path.basenome(pth_file)}, created.')
+            print(f'\nok -> file: {os.path.basename(pth_file)}, created.')
 
         return pth_folder, pth_file
 
