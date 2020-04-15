@@ -64,18 +64,18 @@ class Sorteio:
 
 class Concurso:
     def _create_init_file(self) -> tuple:
-        pth_folder = os.path.join('.\\', self.name)
-        file_name = 'resultados' + '_' + self.name + '.csv'
-        pth_file = os.path.join(pth_folder, file_name)
+        pth_folder = os.path.join('.\\', self.nome)
+        file_nome = 'resultados' + '_' + self.nome + '.csv'
+        pth_file = os.path.join(pth_folder, file_nome)
 
         if os.path.exists(pth_file):
-            print(f'\nok -> file: {os.path.basename(pth_file)}, found.')
+            print(f'\nok -> file: {os.path.basenome(pth_file)}, found.')
 
         else:
             os.makedirs(pth_folder)
             file = open(pth_file, mode='w', encoding='utf-8', newline='')
             file.close()
-            print(f'\nok -> file: {os.path.basename(pth_file)}, created.')
+            print(f'\nok -> file: {os.path.basenome(pth_file)}, created.')
 
         return pth_folder, pth_file
 
@@ -85,22 +85,22 @@ class Concurso:
 
         if os.path.exists(self._pth_file):
             with open(self._pth_file, encoding='utf-8', mode='r', newline='') as csv_file:
-                csv_len = self._total_balls_drawn + 2
+                csv_len = self._qtd_sorteadas + 2
                 csv_rd = csv.reader(csv_file)
                 csv_rd = (list(filter(None, x)) for x in csv_rd)  # limpa os campos vazios
-                csv_rd = (x for x in csv_rd if len(x) == csv_len)  # colunas válidas -> num + dt + total_balls_drawn
+                csv_rd = (x for x in csv_rd if len(x) == csv_len)  # colunas válidas -> num + dt + qtd_sorteadas
                 header = next(csv_rd, 'empty')  # clear header
 
                 if header == 'empty':
-                    print(f'warning <- file: {os.path.basename(self._pth_file)}, empty.')
+                    print(f'warning <- file: {os.path.basenome(self._pth_file)}, empty.')
 
                 else:
-                    print(f'ok -> file: {os.path.basename(self._pth_file)}, filled.')
+                    print(f'ok -> file: {os.path.basenome(self._pth_file)}, filled.')
                     for r in csv_rd:
                         rows.append(r)
 
             if 0 < len(rows):
-                range_balls = range(1, self._total_balls + 1)
+                range_balls = range(1, self._qtd_bolas + 1)
 
                 for r in rows:
                     draw_balls = tuple(int(b) for b in r[2:])
@@ -114,17 +114,17 @@ class Concurso:
 
         return sorteios
 
-    def __init__(self, name: str, total_balls: int, total_balls_drawn: int, min_hits_balls: int):
-        self._name = ''
-        self._total_balls = 0
-        self._total_balls_drawn = 0
-        self._min_hits_balls = 0
+    def __init__(self, nome: str, qtd_bolas: int, qtd_sorteadas: int, qtd_min_acertos: int):
+        self._nome = ''
+        self._qtd_bolas = 0
+        self._qtd_sorteadas = 0
+        self._qtd_min_acertos = 0
         self._sorteios = None
 
-        self.name = name
-        self.total_balls = total_balls
-        self.total_balls_drawn = total_balls_drawn
-        self.min_hits_balls = min_hits_balls
+        self.nome = nome
+        self.qtd_bolas = qtd_bolas
+        self.qtd_sorteadas = qtd_sorteadas
+        self.qtd_min_acertos = qtd_min_acertos
 
         self._pth_folder, self._pth_file = self._create_init_file()
         self._sorteios = self._load_sorteios()
@@ -133,8 +133,8 @@ class Concurso:
         if len(self.sorteios) == 0:
             print(f'error <- file: {self._pth_file}, empty')
         else:
-            file_name = nome_relatorio + '_' + self._name + '.csv'
-            pth_file = os.path.join(self._pth_folder, file_name)
+            file_nome = nome_relatorio + '_' + self._nome + '.csv'
+            pth_file = os.path.join(self._pth_folder, file_nome)
             try:
                 with open(pth_file, encoding='utf-8', mode='w', newline='') as csv_file:
                     csv_wr = csv.writer(csv_file)
@@ -230,10 +230,10 @@ class Concurso:
                         csv_wr.writerow(sorteio_row)
 
             except PermissionError:
-                print(f'error <- file: {os.path.basename(pth_file)}, open.')
+                print(f'error <- file: {os.path.basenome(pth_file)}, open.')
 
             else:
-                print(f'ok -> file: {os.path.basename(pth_file)}, created.')
+                print(f'ok -> file: {os.path.basenome(pth_file)}, created.')
 
     @property
     def sorteios(self):
@@ -244,33 +244,33 @@ class Concurso:
         self._sorteios = value
 
     @property
-    def name(self) -> str:
-        return self._name
+    def nome(self) -> str:
+        return self._nome
 
-    @name.setter
-    def name(self, value: str) -> None:
-        self._name = value
-
-    @property
-    def total_balls(self) -> int:
-        return self._total_balls
-
-    @total_balls.setter
-    def total_balls(self, value: int) -> None:
-        self._total_balls = value
+    @nome.setter
+    def nome(self, value: str) -> None:
+        self._nome = value
 
     @property
-    def total_balls_drawn(self) -> int:
-        return self._total_balls_drawn
+    def qtd_bolas(self) -> int:
+        return self._qtd_bolas
 
-    @total_balls_drawn.setter
-    def total_balls_drawn(self, value: int) -> None:
-        self._total_balls_drawn = value
+    @qtd_bolas.setter
+    def qtd_bolas(self, value: int) -> None:
+        self._qtd_bolas = value
 
     @property
-    def min_hits_balls(self) -> int:
-        return self._min_hits_balls
+    def qtd_sorteadas(self) -> int:
+        return self._qtd_sorteadas
 
-    @min_hits_balls.setter
-    def min_hits_balls(self, value: int) -> None:
-        self._min_hits_balls = value
+    @qtd_sorteadas.setter
+    def qtd_sorteadas(self, value: int) -> None:
+        self._qtd_sorteadas = value
+
+    @property
+    def qtd_min_acertos(self) -> int:
+        return self._qtd_min_acertos
+
+    @qtd_min_acertos.setter
+    def qtd_min_acertos(self, value: int) -> None:
+        self._qtd_min_acertos = value
