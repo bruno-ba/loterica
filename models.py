@@ -4,6 +4,7 @@ from dataclasses import dataclass, field, InitVar
 
 from datetime import datetime
 
+
 @dataclass
 class Sorteio:
     """
@@ -34,6 +35,7 @@ class Sorteio:
     colunas na hora de gerar os csv.
 
     """
+
     numero: int
     data: datetime
     bolas: InitVar[tuple]
@@ -109,6 +111,11 @@ class Concurso:
       Cada concurso criado irá gerar um diretório-path relativo, como o nome do concurso e um arquivo csv:
       resultados_nomedoconcurso.csv, que deverá ser substituido manualmente
       """
+
+    @staticmethod
+    def exp_filter_sorteio_by_dates(dt_in: datetime, dt_out: datetime):
+        return lambda s: dt_in <= s.data < dt_out
+
     def _create_init_file(self) -> tuple:
         """
         método interno para verificar ou criar os diretórios e arquivos resultados csv.
@@ -182,107 +189,192 @@ class Concurso:
         self._pth_folder, self._pth_file = self._create_init_file()
         self._sorteios = self._load_sorteios()
 
-    def criar_relatorio(self, nome_relatorio: str, propriedades_sorteio: list) -> None:
+    def criar_relatorio(self, nome_relatorio: str,
+                        propriedades_sorteio: list,
+                        exp_filter=None,
+                        insert_row_header=True) -> None:
         """
         Permite gerar relatórios com qualquer propriedade da classe Sorteio
 
         """
+
         if len(self.sorteios) == 0:
             print(f'error <- file: {self._pth_file}, empty')
+
         else:
             file_nome = nome_relatorio + '_' + self._nome + '.csv'
             pth_file = os.path.join(self._pth_folder, file_nome)
+
+            if not exp_filter:
+                lst_sorteios = self._sorteios
+
+            else:
+                sorteios_filter = exp_filter
+                lst_sorteios = [s for s in self._sorteios if sorteios_filter(s)]
+
             try:
                 with open(pth_file, encoding='utf-8', mode='w', newline='') as csv_file:
                     csv_wr = csv.writer(csv_file)
 
-                    for s in self.sorteios:
+                    for s in lst_sorteios:
                         sorteio_row = []
+                        header_row = []
 
-                        for a in propriedades_sorteio:
-                            if a == 'numero':
+                        for prop_sorteio in propriedades_sorteio:
+                            if prop_sorteio == 'numero':
                                 sorteio_row.append(s.numero)
 
-                            elif a == 'data':
+                                if insert_row_header:
+                                    header_row.append('número')
+
+                            elif prop_sorteio == 'data':
                                 sorteio_row.append(f'{s.data: %x}')
 
-                            elif a == 'bolas':
-                                sorteio_row += [*s.bolas]
+                                if insert_row_header:
+                                    header_row.append('data')
 
-                            elif a == 'bolas_sorteadas':
-                                sorteio_row += [*s.bolas_sorteadas]
+                            elif prop_sorteio == 'bolas_sorteadas':
+                                sorteio_row += s.bolas_sorteadas
 
-                            elif a == 'bolas_sorteadas_pares':
-                                sorteio_row += [*s.bolas_sorteadas_pares]
+                                if insert_row_header:
+                                    header_row += [f'bs {b + 1}'
+                                                   for b in range(len(s.bolas_sorteadas))]
 
-                            elif a == 'bolas_sorteadas_pares_len':
+                            elif prop_sorteio == 'bolas_sorteadas_pares':
+                                sorteio_row += s.bolas_sorteadas_pares
+
+                                if insert_row_header:
+                                    header_row += [f'bs-par {b + 1}'
+                                                   for b in range(len(s.bolas_sorteadas_pares))]
+
+                            elif prop_sorteio == 'bolas_sorteadas_pares_len':
                                 sorteio_row.append(s.bolas_sorteadas_pares_len)
 
-                            elif a == 'bolas_sorteadas_pares_sum':
+                                if insert_row_header:
+                                    header_row.append('qtd-par')
+
+                            elif prop_sorteio == 'bolas_sorteadas_pares_sum':
                                 sorteio_row.append(s.bolas_sorteadas_pares_sum)
 
-                            elif a == 'bolas_sorteadas_pares_avg':
+                                if insert_row_header:
+                                    header_row.append('soma-par')
+
+                            elif prop_sorteio == 'bolas_sorteadas_pares_avg':
                                 sorteio_row.append(f'{s.bolas_sorteadas_pares_avg: .2f}')
 
-                            elif a == 'bolas_sorteadas_pares_zero_fill':
-                                sorteio_row = sorteio_row + [*s.bolas_sorteadas_pares_zero_fill]
+                                if insert_row_header:
+                                    header_row.append('média-par')
 
-                            elif a == 'bolas_sorteadas_impares':
+                            elif prop_sorteio == 'bolas_sorteadas_pares_zero_fill':
+                                sorteio_row += [*s.bolas_sorteadas_pares_zero_fill]
+
+                                if insert_row_header:
+                                    header_row += [f'bs-par {b + 1}'
+                                                   for b in range(len(s.bolas_sorteadas_pares_zero_fill))]
+
+                            elif prop_sorteio == 'bolas_sorteadas_impares':
                                 sorteio_row += [*s.bolas_sorteadas_impares]
 
-                            elif a == 'bolas_sorteadas_impares_len':
+                                if insert_row_header:
+                                    header_row += [f'bs-impar {b + 1}'
+                                                   for b in range(len(s.bolas_sorteadas_impares))]
+
+                            elif prop_sorteio == 'bolas_sorteadas_impares_len':
                                 sorteio_row.append(s.bolas_sorteadas_impares_len)
 
-                            elif a == 'bolas_sorteadas_impares_sum':
+                                if insert_row_header:
+                                    header_row.append('qtd-impar')
+
+                            elif prop_sorteio == 'bolas_sorteadas_impares_sum':
                                 sorteio_row.append(s.bolas_sorteadas_impares_sum)
 
-                            elif a == 'bolas_sorteadas_impares_avg':
+                                if insert_row_header:
+                                    header_row.append('soma-impar')
+
+                            elif prop_sorteio == 'bolas_sorteadas_impares_avg':
                                 sorteio_row.append(f'{s.bolas_sorteadas_impares_avg: .2f}')
 
-                            elif a == 'bolas_sorteadas_impares_zero_fill':
+                                if insert_row_header:
+                                    header_row.append('média-impar')
+
+                            elif prop_sorteio == 'bolas_sorteadas_impares_zero_fill':
                                 sorteio_row += [*s.bolas_sorteadas_impares_zero_fill]
 
-                            elif a == 'bolas_nao_sorteadas':
+                                if insert_row_header:
+                                    header_row += [f'bs-impar {b + 1}'
+                                                   for b in range(len(s.bolas_sorteadas_impares_zero_fill))]
+
+                            elif prop_sorteio == 'bolas_nao_sorteadas':
                                 sorteio_row += [*s.bolas_nao_sorteadas]
 
-                            elif a == 'bolas_nao_sorteadas_pares':
+                                if insert_row_header:
+                                    header_row += [f'bns {b + 1}'
+                                                   for b in range(len(s.bolas_nao_sorteadas))]
+
+                            elif prop_sorteio == 'bolas_nao_sorteadas_pares':
                                 sorteio_row += [*s.bolas_nao_sorteadas_pares]
 
-                            elif a == 'bolas_nao_sorteadas_pares_len':
+                                if insert_row_header:
+                                    header_row += [f'bns-par {b + 1}'
+                                                   for b in range(len(s.bolas_nao_sorteadas_pares))]
+
+                            elif prop_sorteio == 'bolas_nao_sorteadas_pares_len':
                                 sorteio_row.append(s.bolas_nao_sorteadas_pares_len)
 
-                            elif a == 'bolas_nao_sorteadas_pares_sum':
+                            elif prop_sorteio == 'bolas_nao_sorteadas_pares_sum':
                                 sorteio_row.append(s.bolas_nao_sorteadas_pares_sum)
 
-                            elif a == 'bolas_nao_sorteadas_pares_avg':
+                            elif prop_sorteio == 'bolas_nao_sorteadas_pares_avg':
                                 sorteio_row.append(f'{s.bolas_nao_sorteadas_pares_avg: .2f}')
 
-                            elif a == 'bolas_nao_sorteadas_pares_zero_fill':
+                            elif prop_sorteio == 'bolas_nao_sorteadas_pares_zero_fill':
                                 sorteio_row += [*s.bolas_nao_sorteadas_pares_zero_fill]
 
-                            elif a == 'bolas_nao_sorteadas_impares':
+                                if insert_row_header:
+                                    header_row += [f'bns-par {b + 1}'
+                                                   for b in range(len(s.bolas_nao_sorteadas_pares_zero_fill))]
+
+                            elif prop_sorteio == 'bolas_nao_sorteadas_impares':
                                 sorteio_row += [*s.bolas_nao_sorteadas_impares]
 
-                            elif a == 'bolas_nao_sorteadas_impares_len':
+                                if insert_row_header:
+                                    header_row += [f'bns-impar {b + 1}'
+                                                   for b in range(len(s.bolas_nao_sorteadas_impares))]
+
+                            elif prop_sorteio == 'bolas_nao_sorteadas_impares_len':
                                 sorteio_row.append(s.bolas_nao_sorteadas_impares_len)
 
-                            elif a == 'bolas_nao_sorteadas_impares_sum':
+                            elif prop_sorteio == 'bolas_nao_sorteadas_impares_sum':
                                 sorteio_row.append(s.bolas_nao_sorteadas_impares_sum)
 
-                            elif a == 'bolas_nao_sorteadas_impares_avg':
+                            elif prop_sorteio == 'bolas_nao_sorteadas_impares_avg':
                                 sorteio_row.append(f"{s.bolas_nao_sorteadas_impares_avg: .2f}")
 
-                            elif a == 'bolas_nao_sorteadas_impares_zero_fill':
+                            elif prop_sorteio == 'bolas_nao_sorteadas_impares_zero_fill':
                                 sorteio_row += [*s.bolas_nao_sorteadas_impares_zero_fill]
 
-                            elif a == 'bolas_sorteadas_zero_fill':
+
+
+                            elif prop_sorteio == 'bolas_sorteadas_zero_fill':
                                 sorteio_row += [*s.bolas_sorteadas_zero_fill]
 
-                            elif a == 'bolas_nao_sorteadas_zero_fill':
+                                if insert_row_header:
+                                    header_row += [f'{b + 1}'
+                                                   for b in range(len(s.bolas_sorteadas_zero_fill))]
+
+                            elif prop_sorteio == 'bolas_nao_sorteadas_zero_fill':
                                 sorteio_row += [*s.bolas_nao_sorteadas_zero_fill]
+
+                                if insert_row_header:
+                                    header_row += [f'{b + 1}'
+                                                   for b in range(len(s.bolas_nao_sorteadas_zero_fill))]
 
                             else:
                                 sorteio_row.append('error <- s.prop')
+
+                        if insert_row_header:
+                            csv_wr.writerow(header_row)
+                            insert_row_header = False
 
                         csv_wr.writerow(sorteio_row)
 
