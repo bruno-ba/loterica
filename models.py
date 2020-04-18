@@ -244,135 +244,135 @@ class Concurso:
                                 sorteio_row += s.bolas_sorteadas_pares
 
                                 if insert_row_header:
-                                    header_row += [f'bsp-{b + 1}'
+                                    header_row += [f's p-{b + 1}'
                                                    for b in range(len(s.bolas_sorteadas_pares))]
 
                             elif prop_sorteio == 'bolas_sorteadas_pares_len':
                                 sorteio_row.append(s.bolas_sorteadas_pares_len)
 
                                 if insert_row_header:
-                                    header_row.append('bsp-qtd')
+                                    header_row.append('s p-qtd')
 
                             elif prop_sorteio == 'bolas_sorteadas_pares_sum':
                                 sorteio_row.append(s.bolas_sorteadas_pares_sum)
 
                                 if insert_row_header:
-                                    header_row.append('bsp-soma')
+                                    header_row.append('s p-soma')
 
                             elif prop_sorteio == 'bolas_sorteadas_pares_avg':
                                 sorteio_row.append(f'{s.bolas_sorteadas_pares_avg: .2f}')
 
                                 if insert_row_header:
-                                    header_row.append('bsp-med')
+                                    header_row.append('s p-med')
 
                             elif prop_sorteio == 'bolas_sorteadas_pares_zero_fill':
                                 sorteio_row += [*s.bolas_sorteadas_pares_zero_fill]
 
                                 if insert_row_header:
-                                    header_row += [f'bsp-{b + 1}'
+                                    header_row += [f's p-{b + 1}'
                                                    for b in range(len(s.bolas_sorteadas_pares_zero_fill))]
 
                             elif prop_sorteio == 'bolas_sorteadas_impares':
                                 sorteio_row += [*s.bolas_sorteadas_impares]
 
                                 if insert_row_header:
-                                    header_row += [f'bsi-{b + 1}'
+                                    header_row += [f's i-{b + 1}'
                                                    for b in range(len(s.bolas_sorteadas_impares))]
 
                             elif prop_sorteio == 'bolas_sorteadas_impares_len':
                                 sorteio_row.append(s.bolas_sorteadas_impares_len)
 
                                 if insert_row_header:
-                                    header_row.append('bsi-qtd')
+                                    header_row.append('s i-qtd')
 
                             elif prop_sorteio == 'bolas_sorteadas_impares_sum':
                                 sorteio_row.append(s.bolas_sorteadas_impares_sum)
 
                                 if insert_row_header:
-                                    header_row.append('bsi-soma')
+                                    header_row.append('s i-soma')
 
                             elif prop_sorteio == 'bolas_sorteadas_impares_avg':
                                 sorteio_row.append(f'{s.bolas_sorteadas_impares_avg: .2f}')
 
                                 if insert_row_header:
-                                    header_row.append('bsi-med')
+                                    header_row.append('s i-med')
 
                             elif prop_sorteio == 'bolas_sorteadas_impares_zero_fill':
                                 sorteio_row += [*s.bolas_sorteadas_impares_zero_fill]
 
                                 if insert_row_header:
-                                    header_row += [f'bsi-{b + 1}'
+                                    header_row += [f's i-{b + 1}'
                                                    for b in range(len(s.bolas_sorteadas_impares_zero_fill))]
 
                             elif prop_sorteio == 'bolas_nao_sorteadas':
                                 sorteio_row += [*s.bolas_nao_sorteadas]
 
                                 if insert_row_header:
-                                    header_row += [f'bns-{b + 1}'
+                                    header_row += [f'ns-{b + 1}'
                                                    for b in range(len(s.bolas_nao_sorteadas))]
 
                             elif prop_sorteio == 'bolas_nao_sorteadas_pares':
                                 sorteio_row += [*s.bolas_nao_sorteadas_pares]
 
                                 if insert_row_header:
-                                    header_row += [f'bnsp-{b + 1}'
+                                    header_row += [f'ns p-{b + 1}'
                                                    for b in range(len(s.bolas_nao_sorteadas_pares))]
 
                             elif prop_sorteio == 'bolas_nao_sorteadas_pares_len':
                                 sorteio_row.append(s.bolas_nao_sorteadas_pares_len)
 
                                 if insert_row_header:
-                                    header_row.append('bnsp-qtd')
+                                    header_row.append('ns p-qtd')
 
                             elif prop_sorteio == 'bolas_nao_sorteadas_pares_sum':
                                 sorteio_row.append(s.bolas_nao_sorteadas_pares_sum)
 
                                 if insert_row_header:
-                                    header_row.append('bnsp-soma')
+                                    header_row.append('ns p-soma')
 
                             elif prop_sorteio == 'bolas_nao_sorteadas_pares_avg':
                                 sorteio_row.append(f'{s.bolas_nao_sorteadas_pares_avg: .2f}')
 
                                 if insert_row_header:
-                                    header_row.append('bnsp-med')
+                                    header_row.append('ns p-med')
 
                             elif prop_sorteio == 'bolas_nao_sorteadas_pares_zero_fill':
                                 sorteio_row += [*s.bolas_nao_sorteadas_pares_zero_fill]
 
                                 if insert_row_header:
-                                    header_row += [f'bnsp-{b + 1}'
+                                    header_row += [f'ns p-{b + 1}'
                                                    for b in range(len(s.bolas_nao_sorteadas_pares_zero_fill))]
 
                             elif prop_sorteio == 'bolas_nao_sorteadas_impares':
                                 sorteio_row += [*s.bolas_nao_sorteadas_impares]
 
                                 if insert_row_header:
-                                    header_row += [f'bnsi-{b + 1}'
+                                    header_row += [f'ns i-{b + 1}'
                                                    for b in range(len(s.bolas_nao_sorteadas_impares))]
 
                             elif prop_sorteio == 'bolas_nao_sorteadas_impares_len':
                                 sorteio_row.append(s.bolas_nao_sorteadas_impares_len)
 
                                 if insert_row_header:
-                                    header_row.append('bnsi-qtd')
+                                    header_row.append('ns i-qtd')
 
                             elif prop_sorteio == 'bolas_nao_sorteadas_impares_sum':
                                 sorteio_row.append(s.bolas_nao_sorteadas_impares_sum)
 
                                 if insert_row_header:
-                                    header_row.append('bnsi-soma')
+                                    header_row.append('ns i-soma')
 
                             elif prop_sorteio == 'bolas_nao_sorteadas_impares_avg':
                                 sorteio_row.append(f"{s.bolas_nao_sorteadas_impares_avg: .2f}")
 
                                 if insert_row_header:
-                                    header_row.append('bnsi-med')
+                                    header_row.append('ns i-med')
 
                             elif prop_sorteio == 'bolas_nao_sorteadas_impares_zero_fill':
                                 sorteio_row += [*s.bolas_nao_sorteadas_impares_zero_fill]
 
                                 if insert_row_header:
-                                    header_row += [f'bnsi-{b + 1}'
+                                    header_row += [f'ns i-{b + 1}'
                                                    for b in range(len(s.bolas_nao_sorteadas_impares_zero_fill))]
 
                             elif prop_sorteio == 'bolas_sorteadas_zero_fill':
@@ -386,7 +386,7 @@ class Concurso:
                                 sorteio_row += [*s.bolas_nao_sorteadas_zero_fill]
 
                                 if insert_row_header:
-                                    header_row += [f'bns-{b + 1}'
+                                    header_row += [f'bola-{b + 1}'
                                                    for b in range(len(s.bolas_nao_sorteadas_zero_fill))]
 
                             else:
