@@ -379,7 +379,7 @@ class Concurso:
                                 sorteio_row += [*s.bolas_sorteadas_zero_fill]
 
                                 if insert_row_header:
-                                    header_row += [f'bs-{b + 1}'
+                                    header_row += [f'bola-{b + 1}'
                                                    for b in range(len(s.bolas_sorteadas_zero_fill))]
 
                             elif prop_sorteio == 'bolas_nao_sorteadas_zero_fill':
