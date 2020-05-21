@@ -2,7 +2,8 @@ import requests
 import os
 import datetime
 
-lotofacil =['lotofacil', 'http://www1.caixa.gov.br/loterias/_arquivos/loterias/D_lotfac.zip']
+loterias_caixa = {'lotofacil': 'http://www1.caixa.gov.br/loterias/_arquivos/loterias/D_lotfac.zip'}
+
 
 
 def create_folder_results(folder_name):
@@ -40,4 +41,5 @@ def get_results(loto_name, url):
 
 
 if __name__ == '__main__':
-    get_results(lotofacil[0], lotofacil[1])
+    concurso =  'lotofacil'
+    get_results(concurso, loterias_caixa[concurso])
